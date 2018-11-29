@@ -42,8 +42,6 @@ func InitSetUp() {
             }`, setting.LogConfig.LogLevel, logOutPutPath, logOutPutPath)
 	}
 
-	log.Println(js)
-
 	var cfg zap.Config
 	if err := json.Unmarshal([]byte(js), &cfg); err != nil {
 		log.Println(js)

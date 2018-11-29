@@ -12,6 +12,7 @@ var (
 	ServerConfig = &Server{}
 	AppConfig    = &App{}
 	LogConfig    = &Log{}
+	CacheConfig  = &Redis{}
 )
 
 type Db struct {
@@ -50,6 +51,14 @@ type Log struct {
 	Debug       bool
 }
 
+type Redis struct {
+	Host      string
+	Password  string
+	Database  int
+	QueueName string
+	Timeout   time.Duration
+}
+
 func InitSetUp(config_file_path string) {
 	cfg, err := ini.Load(config_file_path)
 	if err != nil {
@@ -79,4 +88,10 @@ func InitSetUp(config_file_path string) {
 		log.Fatalf("Cfg.MapTo LogConfig err: %v", err)
 	}
 
+	err = cfg.Section("redis").MapTo(CacheConfig)
+	if err != nil {
+		log.Fatalf("Cfg.MapTo CacheConfig err: %v", err)
+	}
+
+	CacheConfig.Timeout = CacheConfig.Timeout * time.Second
 }
