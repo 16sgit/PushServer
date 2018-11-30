@@ -8,11 +8,11 @@ import (
 var PUSHER_NOT_EXIST = errors.New("未找到推送服务")
 
 type Info struct {
-	User              string            `json:"user"`                //推送用户
-	TemplateMessageId int64             `json:"template_message_id"` //日志id
-	Config            map[string]string `json:"config"`              //存储相关的配置信息
-	Message           interface{}       `json:"message"`             //存储要推送的信息
-	PushType          string            `json:"push_type"`           //推送类型，例如：wechat
+	User              string                 `json:"user"`                //推送用户
+	TemplateMessageId int64                  `json:"template_message_id"` //日志id
+	Config            map[string]string      `json:"config"`              //存储相关的配置信息
+	Message           map[string]interface{} `json:"message"`             //存储要推送的信息
+	PushType          string                 `json:"push_type"`           //推送类型，例如：wechat
 }
 
 type PushResponse struct {
@@ -23,7 +23,7 @@ type PushResponse struct {
 
 type Pusher interface {
 	//验证推送数据是否符合要求
-	Validate(data Info) error
+	Validate(data *Info) error
 	//推送
 	Push() (PushResponse, error)
 }
