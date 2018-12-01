@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-conf/app.ini
+*.ini
 runtime/
 
 # Test binary, build with `go test -c`
