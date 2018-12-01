@@ -16,7 +16,7 @@ type Info struct {
 }
 
 type PushResponse struct {
-	Status  int64
+	Status  int
 	Message string
 	Msgid   string
 }

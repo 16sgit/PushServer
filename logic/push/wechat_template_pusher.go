@@ -1,14 +1,18 @@
+//微信模板推送功能
 package push
 
 import (
 	"PushServer/pkg/wechat"
+
 	"errors"
+	"fmt"
 	"reflect"
 
+	"github.com/Unknwon/com"
 	"github.com/silenceper/wechat/template"
 )
 
-type WeChatPusher struct {
+type WeChatTemplatePusher struct {
 	msg    *template.Message
 	mpinfo *wechat.MpInfo
 }
@@ -47,6 +51,7 @@ func getMpInfo(config *map[string]string) (*wechat.MpInfo, error) {
 	return &mpinfo, nil
 }
 
+//获取推送的模板信息
 func getTemplate(data *Info) (*template.Message, error) {
 	msg := template.Message{}
 
@@ -94,7 +99,7 @@ func getTemplate(data *Info) (*template.Message, error) {
 }
 
 //验证推送数据是否符合要求
-func (p *WeChatPusher) Validate(data *Info) error {
+func (p *WeChatTemplatePusher) Validate(data *Info) error {
 	//获取公众号信息
 	var err error
 	p.mpinfo, err = getMpInfo(&data.Config)
@@ -111,6 +116,19 @@ func (p *WeChatPusher) Validate(data *Info) error {
 }
 
 //推送
-func (p WeChatPusher) Push() (PushResponse, error) {
-	return PushResponse{}, nil
+func (p WeChatTemplatePusher) Push() (PushResponse, error) {
+	msgid, err := wechat.GetWechat(p.mpinfo).GetTemplate().Send(p.msg)
+	var status int = 0
+	var message string = ""
+
+	if err != nil {
+		status = -1
+		message = fmt.Sprintf("%s", err)
+	}
+
+	return PushResponse{
+		Status:  status,
+		Message: message,
+		Msgid:   com.ToStr(msgid),
+	}, nil
 }

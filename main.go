@@ -1,13 +1,14 @@
 package main
 
 import (
+	"PushServer/logic"
 	"PushServer/models"
 	"PushServer/pkg/cache"
 	"PushServer/pkg/logging"
 	"PushServer/pkg/setting"
-	"PushServer/router"
-	"fmt"
-	"net/http"
+	//"PushServer/router"
+	//"fmt"
+	//"net/http"
 )
 
 //初始化统一控制方法
@@ -26,14 +27,14 @@ func serverDestory() {
 func main() {
 	serverInit()
 	defer serverDestory()
+	logic.Push_service()
+	//	s := &http.Server{
+	//		Addr:           fmt.Sprintf(":%d", setting.ServerConfig.HttpPort),
+	//		Handler:        router.InitRouter(),
+	//		ReadTimeout:    setting.ServerConfig.ReadTimeout,
+	//		WriteTimeout:   setting.ServerConfig.WriteTimeout,
+	//		MaxHeaderBytes: 1 << 20,
+	//	}
 
-	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.ServerConfig.HttpPort),
-		Handler:        router.InitRouter(),
-		ReadTimeout:    setting.ServerConfig.ReadTimeout,
-		WriteTimeout:   setting.ServerConfig.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
-	}
-
-	s.ListenAndServe()
+	//	s.ListenAndServe()
 }

@@ -2,6 +2,7 @@ package wechat
 
 import (
 	"PushServer/pkg/setting"
+	"sync"
 
 	"github.com/silenceper/wechat"
 	"github.com/silenceper/wechat/cache"
@@ -18,11 +19,22 @@ type MpInfo struct {
 }
 
 //获取一个wechat
+//两重锁确保并发安全
 func GetWechat(mp_info *MpInfo) *wechat.Wechat {
 	wechat, ok := wechats[mp_info.AppID]
 
 	if !ok {
-		wechat = createWechat(mp_info)
+		var mutex sync.Mutex
+		mutex.Lock()
+		defer mutex.Unlock()
+
+		wechat, ok := wechats[mp_info.AppID]
+		if !ok {
+			wechat = createWechat(mp_info)
+		}
+
+		return wechat
+
 	}
 
 	return wechat

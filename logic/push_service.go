@@ -31,7 +31,7 @@ func saveLogToDb(log_chan *chan models.TemplateMessageLog) {
 }
 
 //推送服务
-func push_service() {
+func Push_service() {
 	var log_chan = make(chan models.TemplateMessageLog)
 	go saveLogToDb(&log_chan)
 
@@ -40,6 +40,13 @@ func push_service() {
 		push_info_string, err := cache.Pop()
 		if err != nil {
 			log.Fatal(err)
+		}
+
+		push_info_string = `{"push_type":"wechat_template","user":"ofCONv1WVGN2zjF-lOv-rF_nuTc8","template_message_id":1,"message":{"template_id":"D4thuhB44AWUzoP-GcV9IegoCeCycbm41BafOHGY3F8","url":"http://www/baidu.com","data":{"keyword1":{"color":"#173177","value":"十牛信息校园"}}},"config":{"app_id":"wx4b5e49b637c4ccf1","app_secret":"f92fe88d88bcf7de81f1b069fcb166cf"}}`
+
+		if push_info_string == "" {
+			log.Println("没有数据")
+			continue
 		}
 
 		var info push.Info
@@ -60,7 +67,7 @@ func push_service() {
 			}
 
 			//验证是否符合推送要求
-			if err = push_server.Validate(info); err != nil {
+			if err = push_server.Validate(&info); err != nil {
 				push_log := models.NewTemplateMessageLog(info.TemplateMessageId, "0", info.User, -1, fmt.Sprintf("%s", err))
 				*log_chan <- push_log
 				return
@@ -71,6 +78,8 @@ func push_service() {
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			log.Println("完成推送")
 
 			push_log := models.NewTemplateMessageLog(info.TemplateMessageId, push_response.Msgid, info.User, push_response.Status, push_response.Message)
 			*log_chan <- push_log

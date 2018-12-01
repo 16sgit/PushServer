@@ -2,5 +2,5 @@
 package push
 
 var PusherRegisterList = map[string]Pusher{
-	"wechat": &WeChatPusher{},
+	"wechat_template": &WeChatTemplatePusher{},
 }
