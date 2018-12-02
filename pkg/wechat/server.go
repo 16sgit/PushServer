@@ -2,11 +2,11 @@ package wechat
 
 import (
 	"PushServer/pkg/setting"
+
 	"sync"
 
 	"github.com/silenceper/wechat"
 	"github.com/silenceper/wechat/cache"
-	"github.com/silenceper/wechat/template"
 )
 
 var wechats = make(map[string]*wechat.Wechat)
@@ -16,6 +16,10 @@ type MpInfo struct {
 	AppSecret      string
 	Token          string
 	EncodingAESKey string
+}
+
+func (m *MpInfo) GetCustomService() *CustomService {
+	return &CustomService{GetWechat(m)}
 }
 
 //获取一个wechat
@@ -67,11 +71,4 @@ func createWechat(mp_info *MpInfo) *wechat.Wechat {
 	wechats[mp_info.AppID] = wc
 
 	return wc
-}
-
-//模板消息发送
-func SendTemplateMessage(mp_info *MpInfo, msg *template.Message) {
-	send_handle := GetWechat(mp_info).GetTemplate()
-
-	send_handle.Send(msg)
 }

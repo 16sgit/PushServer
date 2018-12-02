@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -38,6 +39,7 @@ func PostJSON(uri string, obj interface{}) ([]byte, error) {
 	jsonData = bytes.Replace(jsonData, []byte("\\u0026"), []byte("&"), -1)
 
 	body := bytes.NewBuffer(jsonData)
+	log.Println(body)
 	response, err := http.Post(uri, "application/json;charset=utf-8", body)
 	if err != nil {
 		return nil, err

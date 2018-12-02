@@ -42,7 +42,7 @@ func Push_service() {
 			log.Fatal(err)
 		}
 
-		push_info_string = `{"push_type":"wechat_template","user":"ofCONv1WVGN2zjF-lOv-rF_nuTc8","template_message_id":1,"message":{"template_id":"D4thuhB44AWUzoP-GcV9IegoCeCycbm41BafOHGY3F8","url":"http://www/baidu.com","data":{"keyword1":{"color":"#173177","value":"十牛信息校园"}}},"config":{"app_id":"wx4b5e49b637c4ccf1","app_secret":"f92fe88d88bcf7de81f1b069fcb166cf"}}`
+		//push_info_string = `{"push_type":"wechat_template","user":"ofCONv1WVGN2zjF-lOv-rF_nuTc8","template_message_id":1,"message":{"template_id":"D4thuhB44AWUzoP-GcV9IegoCeCycbm41BafOHGY3F8","url":"http://www/baidu.com","data":{"keyword1":{"color":"#173177","value":"十牛信息校园"}}},"config":{"app_id":"wx4b5e49b637c4ccf1","app_secret":"f92fe88d88bcf7de81f1b069fcb166cf"}}`
 
 		if push_info_string == "" {
 			log.Println("没有数据")

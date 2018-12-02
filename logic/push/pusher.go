@@ -7,6 +7,7 @@ import (
 //错误类型
 var PUSHER_NOT_EXIST = errors.New("未找到推送服务")
 
+//消息体
 type Info struct {
 	User              string                 `json:"user"`                //推送用户
 	TemplateMessageId int64                  `json:"template_message_id"` //日志id
@@ -15,26 +16,11 @@ type Info struct {
 	PushType          string                 `json:"push_type"`           //推送类型，例如：wechat
 }
 
+//推送服务响应
 type PushResponse struct {
 	Status  int
 	Message string
 	Msgid   string
-}
-
-type Pusher interface {
-	//验证推送数据是否符合要求
-	Validate(data *Info) error
-	//推送
-	Push() (PushResponse, error)
-}
-
-func NewPusher(pusher_type string) (Pusher, error) {
-	producer, ok := PusherRegisterList[pusher_type]
-	if !ok {
-		return nil, PUSHER_NOT_EXIST
-	}
-
-	return producer, nil
 }
 
 //验证消息体的格式是否正确
@@ -52,4 +38,20 @@ func ValidateFormat(info *Info) error {
 	}
 
 	return nil
+}
+
+type Pusher interface {
+	//验证推送数据是否符合要求
+	Validate(data *Info) error
+	//推送
+	Push() (PushResponse, error)
+}
+
+func NewPusher(pusher_type string) (Pusher, error) {
+	producer, ok := PusherRegisterList[pusher_type]
+	if !ok {
+		return nil, PUSHER_NOT_EXIST
+	}
+
+	return producer, nil
 }
