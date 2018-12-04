@@ -27,7 +27,7 @@ func serverDestory() {
 func main() {
 	serverInit()
 	defer serverDestory()
-	logic.Push_service()
+	logic.PushService()
 	//	s := &http.Server{
 	//		Addr:           fmt.Sprintf(":%d", setting.ServerConfig.HttpPort),
 	//		Handler:        router.InitRouter(),

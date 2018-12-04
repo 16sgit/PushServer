@@ -4,7 +4,8 @@ package cache
 import (
 	"PushServer/models"
 	"PushServer/pkg/setting"
-	"log"
+
+	//	"log"
 	"testing"
 	//	"github.com/Unknwon/com"
 	//. "github.com/smartystreets/goconvey/convey"
@@ -22,10 +23,18 @@ func serverDestory() {
 }
 
 //模板推送功能测试
-func TestWechatValidate(t *testing.T) {
+//func TestWechatValidate(t *testing.T) {
+//	Init()
+//	defer serverDestory()
+
+//	log.Println(Pop())
+
+//}
+
+//模板推送功能测试
+func TestIncreaseHash(t *testing.T) {
 	Init()
 	defer serverDestory()
-
-	log.Println(Pop())
+	IncreaseConsumptionNumOfPerMinute()
 
 }

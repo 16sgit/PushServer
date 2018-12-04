@@ -32,10 +32,31 @@ func saveLogToDb(log_chan *chan models.TemplateMessageLog) {
 	}
 }
 
+//推送结束的后续操作
+//1.每消费100条将记录保存入数据库
+//2.记录每分钟的消费数量
+func afterpush(log_chan *chan models.TemplateMessageLog) {
+	var i int = 0
+	var logs []models.TemplateMessageLog
+	for log_info := range *log_chan {
+		i = i + 1
+		logs = append(logs, log_info)
+		if i%100 == 0 {
+			models.AddTemplateMessageLogs(&logs)
+			//清空数据
+			i = 0
+			logs = append([]models.TemplateMessageLog{})
+		}
+
+		//记录当天每分钟的消费数量
+		cache.IncreaseConsumptionNumOfPerMinute()
+	}
+}
+
 //推送服务
-func Push_service() {
+func PushService() {
 	var log_chan = make(chan models.TemplateMessageLog)
-	go saveLogToDb(&log_chan)
+	go afterpush(&log_chan)
 	gatefs := routine.NewGatefs(setting.AppConfig.RoutineNum)
 
 	for {
