@@ -4,6 +4,8 @@ import (
 	"PushServer/logic/push"
 	"PushServer/models"
 	"PushServer/pkg/cache"
+	"PushServer/pkg/routine"
+	"PushServer/pkg/setting"
 	"fmt"
 
 	//"PushServer/pkg/logging"
@@ -34,6 +36,7 @@ func saveLogToDb(log_chan *chan models.TemplateMessageLog) {
 func Push_service() {
 	var log_chan = make(chan models.TemplateMessageLog)
 	go saveLogToDb(&log_chan)
+	gatefs := routine.NewGatefs(setting.AppConfig.RoutineNum)
 
 	for {
 		//获取推送数据
@@ -58,6 +61,9 @@ func Push_service() {
 		}
 
 		go func(info push.Info, log_chan *chan models.TemplateMessageLog) {
+			gatefs.Enter()
+			defer gatefs.Leave()
+
 			//根据推送类型获取推送服务
 			push_server, err := push.NewPusher(info.PushType)
 			if err != nil {

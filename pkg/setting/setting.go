@@ -40,6 +40,7 @@ type App struct {
 	ImageSavePath   string
 	ImageMaxSize    int
 	ImageAllowExts  []string
+	RoutineNum      int
 }
 
 type Log struct {
@@ -92,6 +93,5 @@ func InitSetUp(config_file_path string) {
 	if err != nil {
 		log.Fatalf("Cfg.MapTo CacheConfig err: %v", err)
 	}
-
 	CacheConfig.Timeout = CacheConfig.Timeout * time.Second
 }
